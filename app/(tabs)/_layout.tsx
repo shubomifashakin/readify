@@ -1,43 +1,90 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import React from "react";
+import { Tabs } from "expo-router";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import BookstoreIcon from "@/components/svgs/Bookstore";
+import HomeIcon from "@/components/svgs/HomeIcon";
+import LibraryIcon from "@/components/svgs/LibraryIcon";
+import SearchIcon from "@/components/svgs/searchIcon";
+import TabLabel from "@/components/TabLabel";
+
+import { moderateScale, verticalScale } from "@/lib/helpers";
+import { useTheme } from "@rneui/themed";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+  const { theme } = useTheme();
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: "#000",
+        tabBarStyle: { height: verticalScale(80), alignItems: "center" },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          tabBarIcon: ({ color, focused }) => (
+            <HomeIcon fill={focused ? color : "#686D76"} />
+          ),
+          tabBarLabel({ focused, color }) {
+            return (
+              <TabLabel focused color={color}>
+                Home
+              </TabLabel>
+            );
+          },
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="library"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Library",
+          tabBarIcon: ({ color, focused }) => (
+            <LibraryIcon fill={focused ? color : "#686D76"} />
+          ),
+          tabBarLabel({ focused, color }) {
+            return (
+              <TabLabel focused color={color}>
+                Library
+              </TabLabel>
+            );
+          },
+        }}
+      />
+
+      <Tabs.Screen
+        name="bookstore"
+        options={{
+          title: "BookStore",
+          tabBarIcon: ({ color, focused }) => (
+            <BookstoreIcon fill={focused ? color : "#686D76"} />
+          ),
+          tabBarLabel({ focused, color }) {
+            return (
+              <TabLabel focused color={color}>
+                Bookstore
+              </TabLabel>
+            );
+          },
+        }}
+      />
+
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: "Search",
+          tabBarIcon: ({ color, focused }) => (
+            <SearchIcon fill={focused ? color : "#686D76"} />
+          ),
+          tabBarLabel({ focused, color }) {
+            return (
+              <TabLabel focused color={color}>
+                Search
+              </TabLabel>
+            );
+          },
         }}
       />
     </Tabs>

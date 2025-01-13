@@ -1,25 +1,28 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useEffect } from "react";
+import { ThemeProvider } from "@rneui/themed";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import * as SplashScreen from "expo-splash-screen";
+import "react-native-reanimated";
+import { theme } from "@/constants/Colors";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    ArimaRegular: require("../assets/fonts/arima/Arima-Regular.ttf"),
+    ArimaBold: require("../assets/fonts/arima/Arima-Bold.ttf"),
+    ArimaLight: require("../assets/fonts/arima/Arima-Light.ttf"),
+    ArimaMedium: require("../assets/fonts/arima/Arima-Medium.ttf"),
+    ArimaSemiBold: require("../assets/fonts/arima/Arima-SemiBold.ttf"),
   });
 
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      console.log("loaded");
     }
   }, [loaded]);
 
@@ -28,12 +31,21 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider theme={theme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+            animation: "fade",
+            animationDuration: 1000,
+          }}
+        />
         <Stack.Screen name="+not-found" />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style="auto" />
+
+      <StatusBar style={theme.mode === "dark" ? "light" : "dark"} />
     </ThemeProvider>
   );
 }

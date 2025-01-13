@@ -1,26 +1,39 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
+import { createTheme, Colors } from "@rneui/themed";
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// themed.d.ts
+import "@rneui/themed";
 
-export const Colors = {
+//add the following properties to the namespace
+declare module "@rneui/themed" {
+  export interface Colors {
+    tertiary: string;
+    danger: string;
+    active: string;
+    textColor: string;
+    mainTextColor: string;
+    pressed: string;
+  }
+}
+export const ThemeColors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
-  },
+    background: "#F5F5F5",
+    white: "#F9F9F9",
+    textColor: "#686D76",
+    mainTextColor: "#0D0D0D",
+    pressed: "#0D0D0D3",
+  } as Colors,
+
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
-  },
+    background: "#F5F5F5",
+    white: "#F9F9F9",
+    textColor: "#686D76",
+    mainTextColor: "#0D0D0D",
+  } as Colors,
 };
+
+//this creates the theme
+export const theme = createTheme({
+  lightColors: ThemeColors.light,
+  darkColors: ThemeColors.dark,
+  mode: "light", //we set the current color mode to dark
+});
