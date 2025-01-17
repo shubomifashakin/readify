@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   FlatList,
-  Image,
   ImageSourcePropType,
   Pressable,
   ScrollView,
@@ -10,21 +9,21 @@ import {
   TextInput,
   View,
 } from "react-native";
-import Animated, {
-  Easing,
-  FadeInDown,
-  SlideInDown,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Colors, useTheme } from "@rneui/themed";
 
 import Header from "@/components/header";
+import Separator from "@/components/Separator";
+import BellIcon from "@/components/svgs/BellIcon";
 import SearchIcon from "@/components/svgs/searchIcon";
+import FlatlistImage from "@/components/FlatlistItem";
+import ContinueReadingItem from "@/components/ContinueReadingItem";
+
+import { customEntering } from "@/animations/EnterAnimation";
+
+import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
 import trendingImage1 from "../../assets/images/trendingImage1.png";
 import trendingImage2 from "../../assets/images/trendingImage2.png";
@@ -34,6 +33,11 @@ import trendingImage5 from "../../assets/images/trendingImage5.png";
 import trendingImage6 from "../../assets/images/trendingImage6.png";
 import trendingImage7 from "../../assets/images/trendingImage7.png";
 import trendingImage8 from "../../assets/images/trendingImage8.png";
+
+import continueImage1 from "../../assets/images/continueImage1.png";
+import continueImage2 from "../../assets/images/continueImage2.png";
+
+import thestandin from "../../assets/images/thestandin.png";
 
 const images: ImageSourcePropType[] = [
   trendingImage1,
@@ -46,7 +50,17 @@ const images: ImageSourcePropType[] = [
   trendingImage8,
 ];
 
-import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
+const images2: ImageSourcePropType[] = [
+  thestandin,
+  trendingImage1,
+  trendingImage2,
+  trendingImage3,
+];
+
+const continueReading = [
+  { page: 46, totalPages: 675, image: continueImage1, book: "Queen Charlotte" },
+  { page: 100, totalPages: 150, image: continueImage2, book: "Daydream" },
+];
 
 export default function Home() {
   const { theme } = useTheme();
@@ -56,24 +70,24 @@ export default function Home() {
   const styles = makeStyles({ colors: theme.colors, insets });
 
   return (
-    <ScrollView style={styles.scrollContainer}>
-      <Header>
-        <View style={styles.header}>
-          <Text
-            style={{
-              fontFamily: "ArimaBold",
-              color: theme.colors.mainTextColor,
-              fontSize: moderateScale(16),
-            }}
-          >
-            Hey Julia
-          </Text>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.scrollContainer}>
+        <Header>
+          <View style={styles.header}>
+            <Text
+              style={{
+                fontFamily: "ArimaBold",
+                color: theme.colors.mainTextColor,
+                fontSize: moderateScale(16),
+              }}
+            >
+              Hey Julia
+            </Text>
 
-          <Text>Hello</Text>
-        </View>
-      </Header>
+            <BellIcon />
+          </View>
+        </Header>
 
-      <View style={styles.container}>
         <Text style={styles.leading}>Are you ready for your daily goal?</Text>
 
         <View style={styles.searchBarContainer}>
@@ -83,22 +97,21 @@ export default function Home() {
             style={styles.textInputStyle}
           />
 
-          <SearchIcon width={horizontalScale(20)} height={verticalScale(20)} />
+          <SearchIcon
+            fill={theme.colors.textColor}
+            width={horizontalScale(20)}
+            height={verticalScale(20)}
+          />
         </View>
 
         <Animated.View
-          entering={FadeInDown.withInitialValues({
-            opacity: 0.5,
-            transform: [{ translateY: 50 }],
-          })
-            .duration(1200)
-            .easing(Easing.elastic(0.9))}
-          style={styles.trendingContainer}
+          entering={customEntering}
+          style={styles.sectionContainer}
         >
-          <View style={styles.trendingTextsContainer}>
-            <Text style={styles.trendingTextHeader}>Trending</Text>
+          <View style={styles.sectionHeaderTexts}>
+            <Text style={styles.sectionHeading}>Trending</Text>
 
-            <Text style={styles.trendingTextLeading}>See all</Text>
+            <Text style={styles.sectionLeading}>See all</Text>
           </View>
 
           <Animated.FlatList
@@ -107,71 +120,156 @@ export default function Home() {
             data={images}
             renderItem={({ item, index }) => {
               return (
-                <View
+                <FlatlistImage
                   key={index}
-                  style={{
-                    height: verticalScale(127),
-                    width: horizontalScale(85),
-                    borderRadius: moderateScale(5),
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    source={item}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </View>
+                  width={85}
+                  height={127}
+                  source={item}
+                />
               );
             }}
             ItemSeparatorComponent={() => {
-              return <View style={{ width: horizontalScale(15) }}></View>;
+              return (
+                <Separator
+                  height={0}
+                  width={15}
+                  isPercentageHeight={false}
+                  isPercentageWidth={false}
+                />
+              );
             }}
           />
         </Animated.View>
 
-        <View style={styles.trendingContainer}>
-          <View style={styles.trendingTextsContainer}>
-            <Text style={styles.trendingTextHeader}>Continue Reading</Text>
-          </View>
-        </View>
-
-        <View style={styles.trendingContainer}>
-          <View style={styles.trendingTextsContainer}>
-            <Text style={styles.trendingTextHeader}>Fictional</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderTexts}>
+            <Text style={styles.sectionHeading}>Continue Reading</Text>
           </View>
 
-          <Animated.FlatList
+          <FlatList
+            data={continueReading}
             horizontal
-            showsHorizontalScrollIndicator={false}
-            data={images}
             renderItem={({ item, index }) => {
               return (
-                <View
+                <ContinueReadingItem
+                  image={item.image}
+                  page={item.page}
+                  totalPages={item.totalPages}
                   key={index}
-                  style={{
-                    height: verticalScale(160),
-                    width: horizontalScale(120),
-                    borderRadius: moderateScale(5),
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    source={item}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </View>
+                  book={item.book}
+                />
+              );
+            }}
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => {
+              return (
+                <Separator
+                  height={0}
+                  width={15}
+                  isPercentageHeight={false}
+                  isPercentageWidth={false}
+                />
+              );
+            }}
+          />
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderTexts}>
+            <Text style={styles.sectionHeading}>Fictional</Text>
+          </View>
+
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={images2}
+            renderItem={({ item, index }) => {
+              return (
+                <FlatlistImage
+                  key={index}
+                  source={item}
+                  height={160}
+                  width={120}
+                  radius={5}
+                />
               );
             }}
             ItemSeparatorComponent={() => {
-              return <View style={{ width: horizontalScale(15) }}></View>;
+              return (
+                <Separator
+                  height={0}
+                  width={15}
+                  isPercentageHeight={false}
+                  isPercentageWidth={false}
+                />
+              );
+            }}
+          />
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderTexts}>
+            <Text style={styles.sectionHeading}>Reading goal</Text>
+          </View>
+
+          <View style={{ position: "relative", height: 100, width: "100%" }}>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                rowGap: verticalScale(30),
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: [{ translateX: "-50%" }, { translateY: "-50%" }],
+              }}
+            >
+              <Text style={styles.readingGoalHeader}>Today&apos;s reading</Text>
+
+              <Text style={styles.readingGoalLeading}>
+                50 minutes to daily reading goals
+              </Text>
+
+              <View style={styles.keepReadingBtnContainer}>
+                <Pressable style={styles.keepReadingBtn}>
+                  <Text style={styles.keepReadingBtnHeader}>Keep reading</Text>
+
+                  <Text style={styles.keepReadingBtnLeading}>Asap</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <View style={styles.sectionHeaderTexts}>
+            <Text style={styles.sectionHeading}>Books read this year</Text>
+          </View>
+
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={images2}
+            renderItem={({ item, index }) => {
+              return (
+                <FlatlistImage
+                  key={index}
+                  source={item}
+                  height={150}
+                  width={90}
+                  radius={5}
+                />
+              );
+            }}
+            ItemSeparatorComponent={() => {
+              return (
+                <Separator
+                  height={0}
+                  width={15}
+                  isPercentageHeight={false}
+                  isPercentageWidth={false}
+                />
+              );
             }}
           />
         </View>
@@ -198,11 +296,10 @@ function makeStyles({
       paddingTop: insets.top,
     },
 
-    scrollContainer: { paddingHorizontal: horizontalScale(20) },
-
-    container: {
+    scrollContainer: {
+      paddingHorizontal: horizontalScale(20),
       paddingVertical: verticalScale(15),
-      paddingHorizontal: horizontalScale(10),
+      backgroundColor: colors.background,
     },
 
     leading: {
@@ -234,26 +331,69 @@ function makeStyles({
       height: "100%",
     },
 
-    trendingContainer: {
-      marginTop: verticalScale(50),
+    sectionContainer: {
+      marginTop: verticalScale(35),
       transformOrigin: "left",
       rowGap: verticalScale(15),
+      backgroundColor: colors.background,
     },
 
-    trendingTextsContainer: {
+    sectionHeaderTexts: {
       flexDirection: "row",
       justifyContent: "space-between",
     },
 
-    trendingTextHeader: {
+    sectionHeading: {
       fontFamily: "ArimaBold",
       fontSize: moderateScale(20),
       color: colors.mainTextColor,
     },
 
-    trendingTextLeading: {
+    sectionLeading: {
       fontFamily: "ArimaRegular",
       fontSize: moderateScale(12, -1.5),
+      color: colors.textColor,
+    },
+
+    readingGoalHeader: {
+      fontFamily: "ArimaBold",
+      color: colors.textColor,
+      fontSize: moderateScale(16),
+    },
+
+    readingGoalLeading: {
+      fontFamily: "ArimaRegular",
+      color: colors.mainTextColor,
+      fontSize: moderateScale(12),
+    },
+
+    keepReadingBtnContainer: {
+      borderRadius: moderateScale(30),
+      backgroundColor: colors.white,
+      width: horizontalScale(169),
+      height: verticalScale(55),
+      shadowColor: "#66666699",
+      shadowOffset: { width: 1, height: 4 },
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+    },
+
+    keepReadingBtn: {
+      width: "100%",
+      height: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+
+    keepReadingBtnHeader: {
+      fontSize: moderateScale(16),
+      fontFamily: "ArimaMedium",
+      color: colors.mainTextColor,
+    },
+
+    keepReadingBtnLeading: {
+      fontSize: moderateScale(12),
+      fontFamily: "ArimaRegular",
       color: colors.textColor,
     },
   });

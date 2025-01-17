@@ -1,45 +1,35 @@
-import { useEffect } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
+
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
   FadeOutUp,
   FadeInDown,
-  FadeInUp,
-  ZoomIn,
   ZoomInLeft,
 } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Colors, useTheme } from "@rneui/themed";
 
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
-import { router } from "expo-router";
 
 export default function Onboarding() {
   const { theme } = useTheme();
 
   const styles = makeStyles({ colors: theme.colors });
 
-  function handlePress() {
-    router.push({ pathname: "/(tabs)" });
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.upper}>
         <Animated.View
           entering={ZoomInLeft.duration(1000).springify().damping(200)}
-          style={[styles.animatedCircle]}
+          style={styles.animatedCircle}
         >
           <Image source={require("../assets/images/Ellipse 1.png")} />
         </Animated.View>
 
         <Animated.View
           entering={FadeInDown.duration(1000).delay(500)}
-          style={[styles.mainImageContainer]}
+          style={styles.mainImageContainer}
         >
           <Image
             style={{
@@ -77,21 +67,11 @@ export default function Onboarding() {
           </Text>
 
           <View style={styles.buttonContainer}>
-            <Pressable
-              onPress={handlePress}
-              style={(isPressed) => {
-                return [
-                  styles.button,
-                  {
-                    backgroundColor: isPressed.pressed
-                      ? "red"
-                      : theme.colors.mainTextColor,
-                  },
-                ];
-              }}
-            >
-              <Text style={styles.buttonText}>Explore</Text>
-            </Pressable>
+            <Link style={styles.button} href={"/(tabs)"}>
+              <View style={styles.buttonTextContainer}>
+                <Text style={styles.buttonText}>Explore</Text>
+              </View>
+            </Link>
           </View>
         </Animated.View>
       </View>
@@ -179,19 +159,28 @@ function makeStyles({ colors }: { colors: Colors }) {
       borderRadius: moderateScale(40),
       width: horizontalScale(185),
       height: verticalScale(45),
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.mainTextColor,
     },
 
     button: {
       backgroundColor: colors.mainTextColor,
       width: "100%",
       height: "100%",
+    },
+
+    buttonTextContainer: {
+      alignContent: "center",
       justifyContent: "center",
-      alignItems: "center",
+      width: "100%",
+      height: "100%",
     },
 
     buttonText: {
       fontFamily: "ArimaBold",
       fontSize: moderateScale(16, -0.8),
+      textAlign: "center",
       color: colors.background,
     },
   });
