@@ -1,6 +1,6 @@
+import { DimensionValue, StyleProp, View, ViewStyle } from "react-native";
+
 import { horizontalScale, verticalScale } from "@/lib/helpers";
-import { ViewStyle } from "react-native";
-import { DimensionValue, StyleProp, View } from "react-native";
 
 export default function Separator({
   width,

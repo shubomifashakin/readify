@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import React, {
   FlatList,
   ScrollView,
@@ -5,65 +6,59 @@ import React, {
   Text,
   View,
 } from "react-native";
-import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Colors } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 
 import Separator from "@/components/Separator";
+import HeadingText from "@/components/HeadingText";
 import LibraryItem from "@/components/LibraryItem";
 import FlatlistImage from "@/components/FlatlistItem";
 
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
-import dream from "../../assets/images/dream.jpeg";
-import herbwitch from "../../assets/images/herbwitch.jpeg";
-import bridgerton from "../../assets/images/bridgerton.png";
-import clickToSubscribe from "../../assets/images/clickToSubscribe.jpeg";
-import songToDrown from "../../assets/images/songToDrown.png";
-import oneLastJob from "../../assets/images/oneLastJob.png";
-import trendingImage8 from "../../assets/images/trendingImage8.png";
-import itEndsWith from "../../assets/images/itEndsWith.png";
-import curses from "../../assets/images/curses.png";
-import otherWords from "../../assets/images/otherWords.png";
-import findingHerPanthers from "../../assets/images/findingHerPanthers.png";
-import thereWasAFeeling from "../../assets/images/thereWasAFeeling.png";
-import torn from "../../assets/images/torn.png";
-
 const freeBooks = [
   {
     name: "Bridgerton",
-    image: bridgerton,
+    image: require("@/assets/images/bridgerton.png"),
     author: "Julia Quin",
   },
 
   {
     name: "The Herbwitch Princess",
-    image: herbwitch,
+    image: require("@/assets/images/herbwitch.jpeg"),
     author: "Rose Lolla",
   },
 
   {
     name: "Click to subscribe",
-    image: clickToSubscribe,
+    image: require("@/assets/images/clickToSubscribe.jpeg"),
     author: "Adele Mandison",
   },
 
   {
     name: "The Dream Runners",
-    image: dream,
+    image: require("@/assets/images/dream.jpeg"),
     author: "Adele Mandison",
   },
 ];
 
-const bookStore = [oneLastJob, songToDrown, trendingImage8, itEndsWith];
+const bookStore = [
+  require("@/assets/images/oneLastJob.png"),
+  require("@/assets/images/songToDrown.png"),
+  require("@/assets/images/trendingImage8.png"),
+  require("@/assets/images/itEndsWith.png"),
+];
 
 const genres = [
-  { image: curses, genre: "Fiction" },
-  { image: otherWords, genre: "War" },
-  { image: findingHerPanthers, genre: "Fantasy" },
-  { image: thereWasAFeeling, genre: "Poetry" },
-  { image: torn, genre: "Prose" },
+  { image: require("@/assets/images/curses.png"), genre: "Fiction" },
+  { image: require("@/assets/images/herbwitch.jpeg"), genre: "War" },
+  {
+    image: require("@/assets/images/findingHerPanthers.png"),
+    genre: "Fantasy",
+  },
+  { image: require("@/assets/images/thereWasAFeeling.png"), genre: "Poetry" },
+  { image: require("@/assets/images/torn.png"), genre: "Prose" },
 ];
 
 export default function Bookstore() {
@@ -79,7 +74,7 @@ export default function Bookstore() {
         alwaysBounceVertical
       >
         <View style={styles.section}>
-          <Text style={styles.listHeading}>Book Store</Text>
+          <HeadingText>Book Store</HeadingText>
 
           <FlatList
             data={bookStore}
@@ -110,7 +105,7 @@ export default function Bookstore() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.listHeading}>Genres</Text>
+          <HeadingText>Genres</HeadingText>
 
           <FlatList
             horizontal
@@ -153,17 +148,16 @@ export default function Bookstore() {
         </View>
 
         <View>
-          <Text style={styles.listHeading}>Free books</Text>
+          <HeadingText>Free books</HeadingText>
 
           <View>
             {freeBooks.map((book, index) => {
               return (
-                <>
-                  <LibraryItem item={book} key={`freebook-${index}`} />
+                <Fragment key={`freebook-${index}`}>
+                  <LibraryItem item={book} />
 
                   {index + 1 !== freeBooks.length ? (
                     <Separator
-                      key={`separator-${index}`}
                       height={1}
                       width={"100%"}
                       isPercentageHeight={false}
@@ -174,7 +168,7 @@ export default function Bookstore() {
                       }}
                     />
                   ) : null}
-                </>
+                </Fragment>
               );
             })}
           </View>
@@ -189,13 +183,6 @@ function makeStyles({ colors }: { colors: Colors }) {
     scrollContainer: {
       paddingHorizontal: horizontalScale(20),
       paddingVertical: verticalScale(15),
-    },
-
-    listHeading: {
-      fontFamily: "ArimaBold",
-      fontSize: moderateScale(20),
-      color: colors.mainTextColor,
-      paddingBottom: verticalScale(20),
     },
 
     section: { marginBottom: verticalScale(40) },

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   FlatList,
-  ImageSourcePropType,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -25,41 +24,37 @@ import { customEntering } from "@/animations/EnterAnimation";
 
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
-import trendingImage1 from "../../assets/images/trendingImage1.png";
-import trendingImage2 from "../../assets/images/trendingImage2.png";
-import trendingImage3 from "../../assets/images/trendingImage3.png";
-import trendingImage4 from "../../assets/images/trendingImage4.png";
-import trendingImage5 from "../../assets/images/trendingImage5.png";
-import trendingImage6 from "../../assets/images/trendingImage6.png";
-import trendingImage7 from "../../assets/images/trendingImage7.png";
-import trendingImage8 from "../../assets/images/trendingImage8.png";
-
-import continueImage1 from "../../assets/images/continueImage1.png";
-import continueImage2 from "../../assets/images/continueImage2.png";
-
-import thestandin from "../../assets/images/thestandin.png";
-
-const images: ImageSourcePropType[] = [
-  trendingImage1,
-  trendingImage2,
-  trendingImage3,
-  trendingImage4,
-  trendingImage5,
-  trendingImage6,
-  trendingImage7,
-  trendingImage8,
+const images = [
+  require("@/assets/images/trendingImage1.png"),
+  require("@/assets/images/trendingImage2.png"),
+  require("@/assets/images/trendingImage3.png"),
+  require("@/assets/images/trendingImage4.png"),
+  require("@/assets/images/trendingImage5.png"),
+  require("@/assets/images/trendingImage6.png"),
+  require("@/assets/images/trendingImage7.png"),
+  require("@/assets/images/trendingImage8.png"),
 ];
 
-const images2: ImageSourcePropType[] = [
-  thestandin,
-  trendingImage1,
-  trendingImage2,
-  trendingImage3,
+const images2 = [
+  require("@/assets/images/thestandin.png"),
+  require("@/assets/images/trendingImage1.png"),
+  require("@/assets/images/trendingImage2.png"),
+  require("@/assets/images/trendingImage3.png"),
 ];
 
 const continueReading = [
-  { page: 46, totalPages: 675, image: continueImage1, book: "Queen Charlotte" },
-  { page: 100, totalPages: 150, image: continueImage2, book: "Daydream" },
+  {
+    page: 46,
+    totalPages: 675,
+    image: require("@/assets/images/continueImage1.png"),
+    book: "Queen Charlotte",
+  },
+  {
+    page: 100,
+    totalPages: 150,
+    image: require("@/assets/images/continueImage2.png"),
+    book: "Daydream",
+  },
 ];
 
 export default function Home() {

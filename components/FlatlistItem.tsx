@@ -1,4 +1,5 @@
 import { horizontalScale, verticalScale, moderateScale } from "@/lib/helpers";
+import { Link } from "expo-router";
 import { Image, ImageSourcePropType, View } from "react-native";
 
 export default function FlatlistImage({
@@ -21,14 +22,23 @@ export default function FlatlistImage({
         overflow: "hidden",
       }}
     >
-      <Image
-        source={source}
-        style={{
-          height: "100%",
-          width: "100%",
-          objectFit: "cover",
+      <Link
+        href={{
+          pathname: "/reading",
+          params: {
+            image: JSON.stringify(source),
+          },
         }}
-      />
+      >
+        <Image
+          source={source}
+          style={{
+            height: "100%",
+            width: "100%",
+            objectFit: "cover",
+          }}
+        />
+      </Link>
     </View>
   );
 }

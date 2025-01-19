@@ -112,8 +112,8 @@ function makeStyles({ colors }: { colors: Colors }, percentageRead: number) {
 
       //new
       shadowColor: "#0e0e0e99",
-      shadowOffset: { width: -1, height: 2 },
-      shadowOpacity: 0.5,
+      shadowOffset: { width: 1, height: 1 },
+      shadowOpacity: 0.25,
       shadowRadius: 3,
     },
 
