@@ -5,9 +5,10 @@ import {
   Text,
   View,
 } from "react-native";
+import { Link } from "expo-router";
 
-import { useTheme } from "@rneui/themed";
 import { Colors } from "@rneui/base";
+import { useTheme } from "@rneui/themed";
 
 import StarIcon from "./svgs/StarIcon";
 
@@ -31,33 +32,42 @@ export default function ContinueReadingItem({
   const styles = makeStyles(theme, percentageRead);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.left}>
-        <Image source={image} style={styles.image} />
-      </View>
+    <Link
+      href={{
+        pathname: "/(tabs)/currentRead",
+        params: {
+          bookImage: JSON.stringify(image),
+        },
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.left}>
+          <Image source={image} style={styles.image} />
+        </View>
 
-      <View>
-        <Text style={styles.heading}>{book}</Text>
+        <View>
+          <Text style={styles.heading}>{book}</Text>
 
-        <Text style={styles.leading}>
-          Page {page} of {totalPages}
-        </Text>
+          <Text style={styles.leading}>
+            Page {page} of {totalPages}
+          </Text>
 
-        <View style={styles.percentageContainer}>
-          <View style={styles.percentageInner}>
-            <View style={styles.percentage}></View>
+          <View style={styles.percentageContainer}>
+            <View style={styles.percentageInner}>
+              <View style={styles.percentage}></View>
+            </View>
           </View>
-        </View>
 
-        <View style={{ flexDirection: "row" }}>
-          {Array.from({ length: 5 }).map((_, index) => {
-            return <StarIcon key={index} />;
-          })}
-        </View>
+          <View style={{ flexDirection: "row" }}>
+            {Array.from({ length: 5 }).map((_, index) => {
+              return <StarIcon key={index} />;
+            })}
+          </View>
 
-        <Text style={styles.bottomText}>Continue Reading</Text>
+          <Text style={styles.bottomText}>Continue Reading</Text>
+        </View>
       </View>
-    </View>
+    </Link>
   );
 }
 

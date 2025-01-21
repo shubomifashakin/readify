@@ -1,31 +1,40 @@
-import HeadingText from "@/components/HeadingText";
-import Separator from "@/components/Separator";
-import BookIcon from "@/components/svgs/BookIcon";
-import HeadphonesIcon from "@/components/svgs/HeadphonesIcon";
-import HeartIcon from "@/components/svgs/HeartIcon";
-import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
-import { Colors } from "@rneui/base";
-import { useTheme } from "@rneui/themed";
-import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   Image,
   ImageSourcePropType,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import Animated, { SlideInRight } from "react-native-reanimated";
-import { EdgeInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Colors } from "@rneui/base";
+import { useTheme } from "@rneui/themed";
+
+import Animated, { SlideOutRight } from "react-native-reanimated";
+
+import Header from "@/components/header";
+import Separator from "@/components/Separator";
+import BookIcon from "@/components/svgs/BookIcon";
+import BackIcon from "@/components/svgs/BackIcon";
+import HeadingText from "@/components/HeadingText";
+import HeartIcon from "@/components/svgs/HeartIcon";
+import BookmarkIcon from "@/components/svgs/BookmarkIcon";
+import HeadphonesIcon from "@/components/svgs/HeadphonesIcon";
+
+import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
 export default function ReadingPage() {
+  //in a real world app, this would probabyl pass the book id and then fetch the book from the server
+  //after that it would display the book details
   const { theme } = useTheme();
-
-  const [favorited, setFavorited] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const styles = makeStyles(theme);
+
+  const [favorited, setFavorited] = useState(false);
 
   const { image } = useLocalSearchParams<{ image: string }>();
   const imageSource = JSON.parse(image) as ImageSourcePropType;
@@ -35,107 +44,126 @@ export default function ReadingPage() {
   }
 
   return (
-    <Animated.View
-      entering={SlideInRight.duration(500)}
-      style={styles.container}
-    >
-      <ScrollView>
-        <View style={styles.topContainer}>
-          <View style={styles.imageContainer}>
-            <Image source={imageSource} style={styles.image} />
-          </View>
+    <Animated.ScrollView exiting={SlideOutRight.duration(600)}>
+      <Header>
+        <View
+          style={{
+            justifyContent: "space-between",
+            paddingHorizontal: horizontalScale(20),
+            height: verticalScale(120 - insets.top),
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: theme.colors.white,
+            paddingTop: insets.top,
+            position: "relative",
+          }}
+        >
+          <Pressable
+            onPress={() => router.back()}
+            style={{
+              width: horizontalScale(30),
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
+            }}
+          >
+            <BackIcon />
+          </Pressable>
 
-          <View style={styles.topTexts}>
-            <View style={styles.textContainer}>
-              <Text style={styles.textHeader}>Ratings</Text>
+          <BookmarkIcon />
+        </View>
+      </Header>
 
-              <Pressable onPress={handleAddToFav}>
-                <HeartIcon
-                  fill={favorited ? theme.colors.mainTextColor : "transparent"}
-                />
-              </Pressable>
-            </View>
-
-            <View style={styles.textContainer}>
-              <Text style={styles.textHeader}>Saved</Text>
-
-              <Text style={styles.textLeading}>2.7k</Text>
-            </View>
-
-            <View style={styles.textContainer}>
-              <Text style={styles.textHeader}>Lang</Text>
-
-              <Text style={styles.textLeading}>Eng</Text>
-            </View>
-          </View>
+      <View style={styles.topContainer}>
+        <View style={styles.imageContainer}>
+          <Image source={imageSource} style={styles.image} />
         </View>
 
-        <View style={styles.bottomContainer}>
-          <View style={styles.bottomNavContainer}>
-            <View style={styles.navbar}>
-              <View style={styles.navbarTextContainer}>
-                <BookIcon
-                  width={horizontalScale(20)}
-                  height={verticalScale(20)}
-                />
+        <View style={styles.topTexts}>
+          <View style={styles.textContainer}>
+            <Text style={styles.textHeader}>Ratings</Text>
 
-                <Text style={styles.navbarText}>Read book</Text>
-              </View>
+            <Pressable onPress={handleAddToFav}>
+              <HeartIcon
+                fill={favorited ? theme.colors.mainTextColor : "transparent"}
+              />
+            </Pressable>
+          </View>
 
-              <Separator
-                height={"50%"}
-                isPercentageHeight={true}
-                width={2.5}
-                isPercentageWidth={false}
-                styles={{ backgroundColor: theme.colors.textColor }}
+          <View style={styles.textContainer}>
+            <Text style={styles.textHeader}>Saved</Text>
+
+            <Text style={styles.textLeading}>2.7k</Text>
+          </View>
+
+          <View style={styles.textContainer}>
+            <Text style={styles.textHeader}>Lang</Text>
+
+            <Text style={styles.textLeading}>Eng</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.bottomContainer}>
+        <View style={styles.bottomNavContainer}>
+          <View style={styles.navbar}>
+            <View style={styles.navbarTextContainer}>
+              <BookIcon
+                width={horizontalScale(20)}
+                height={verticalScale(20)}
               />
 
-              <View style={styles.navbarTextContainer}>
-                <HeadphonesIcon
-                  width={horizontalScale(20)}
-                  height={verticalScale(20)}
-                />
+              <Text style={styles.navbarText}>Read book</Text>
+            </View>
 
-                <Text style={styles.navbarText}>Listen to Audio</Text>
-              </View>
+            <Separator
+              height={"50%"}
+              isPercentageHeight={true}
+              width={2.5}
+              isPercentageWidth={false}
+              styles={{ backgroundColor: theme.colors.textColor }}
+            />
+
+            <View style={styles.navbarTextContainer}>
+              <HeadphonesIcon
+                width={horizontalScale(20)}
+                height={verticalScale(20)}
+              />
+
+              <Text style={styles.navbarText}>Listen to Audio</Text>
             </View>
           </View>
-
-          <View>
-            <HeadingText>About the book</HeadingText>
-
-            <Text style={styles.leadingText}>
-              “These are the people you will need to know,” he went on.
-              “Connections that you must cultivate.Lucy nodded dutifully, all
-              the while making a mental list of all the places she would rather
-              be. Paris, Venice, Greece, although weren’t they at war? No
-              matter. She would still rather be in Greece.
-            </Text>
-          </View>
-
-          <View>
-            <HeadingText>Who is this for</HeadingText>
-
-            <Text style={styles.leadingText}>
-              “These are the people you will need to know,” he went on.
-              “Connections that you must cultivate.Lucy nodded dutifully, all
-              the while making a mental list of all the places she would rather
-              be. Paris, Venice, Greece, although weren’t they at war? No
-              matter. She would still rather be in Greece.
-            </Text>
-          </View>
         </View>
-      </ScrollView>
-    </Animated.View>
+
+        <View>
+          <HeadingText>About the book</HeadingText>
+
+          <Text style={styles.leadingText}>
+            “These are the people you will need to know,” he went on.
+            “Connections that you must cultivate.Lucy nodded dutifully, all the
+            while making a mental list of all the places she would rather be.
+            Paris, Venice, Greece, although weren’t they at war? No matter. She
+            would still rather be in Greece.
+          </Text>
+        </View>
+
+        <View>
+          <HeadingText>Who is this for</HeadingText>
+
+          <Text style={styles.leadingText}>
+            “These are the people you will need to know,” he went on.
+            “Connections that you must cultivate.Lucy nodded dutifully, all the
+            while making a mental list of all the places she would rather be.
+            Paris, Venice, Greece, although weren’t they at war? No matter. She
+            would still rather be in Greece.
+          </Text>
+        </View>
+      </View>
+    </Animated.ScrollView>
   );
 }
 
 function makeStyles({ colors }: { colors: Colors }) {
   return StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-
     topContainer: {
       height: verticalScale(455),
       backgroundColor: colors.textColor,
@@ -182,7 +210,8 @@ function makeStyles({ colors }: { colors: Colors }) {
     bottomContainer: {
       paddingHorizontal: horizontalScale(20),
       rowGap: verticalScale(35),
-      minHeight: verticalScale(650),
+      flex: 1,
+      minHeight: verticalScale(600),
     },
 
     bottomNavContainer: {

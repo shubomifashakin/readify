@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FlatList,
+  ImageSourcePropType,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,14 +9,22 @@ import {
   TextInput,
   View,
 } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Colors, useTheme } from "@rneui/themed";
 
 import Header from "@/components/header";
+import TickIcon from "@/components/svgs/Tick";
 import Separator from "@/components/Separator";
 import BellIcon from "@/components/svgs/BellIcon";
+import OvalIcon from "@/components/svgs/OvalIcon";
 import SearchIcon from "@/components/svgs/searchIcon";
 import FlatlistImage from "@/components/FlatlistItem";
 import ContinueReadingItem from "@/components/ContinueReadingItem";
@@ -24,7 +33,7 @@ import { customEntering } from "@/animations/EnterAnimation";
 
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
-const images = [
+const images: ImageSourcePropType[] = [
   require("@/assets/images/trendingImage1.png"),
   require("@/assets/images/trendingImage2.png"),
   require("@/assets/images/trendingImage3.png"),
@@ -35,7 +44,7 @@ const images = [
   require("@/assets/images/trendingImage8.png"),
 ];
 
-const images2 = [
+const images2: ImageSourcePropType[] = [
   require("@/assets/images/thestandin.png"),
   require("@/assets/images/trendingImage1.png"),
   require("@/assets/images/trendingImage2.png"),
@@ -63,6 +72,31 @@ export default function Home() {
   const insets = useSafeAreaInsets();
 
   const styles = makeStyles({ colors: theme.colors, insets });
+
+  const flatlistScrolled = useSharedValue(0);
+
+  const [width, setWidth] = useState(0);
+
+  //the total width of the flatlist container
+  const totalScrollableFlatlistWidth = width;
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return { transform: [{ translateX: flatlistScrolled.value }] };
+  });
+
+  useEffect(
+    function () {
+      flatlistScrolled.value = withRepeat(
+        withTiming(-totalScrollableFlatlistWidth, {
+          duration: 10000,
+          easing: Easing.linear,
+        }),
+        -1,
+        true
+      );
+    },
+    [width]
+  );
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -101,7 +135,7 @@ export default function Home() {
 
         <Animated.View
           entering={customEntering}
-          style={styles.sectionContainer}
+          style={[styles.sectionContainer]}
         >
           <View style={styles.sectionHeaderTexts}>
             <Text style={styles.sectionHeading}>Trending</Text>
@@ -109,31 +143,24 @@ export default function Home() {
             <Text style={styles.sectionLeading}>See all</Text>
           </View>
 
-          <Animated.FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={images}
-            renderItem={({ item, index }) => {
+          <Animated.View
+            onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+            style={[
+              { flexDirection: "row", columnGap: horizontalScale(10) },
+              animatedStyles,
+            ]}
+          >
+            {images.map((image, index) => {
               return (
                 <FlatlistImage
                   key={index}
                   width={85}
                   height={127}
-                  source={item}
+                  source={image}
                 />
               );
-            }}
-            ItemSeparatorComponent={() => {
-              return (
-                <Separator
-                  height={0}
-                  width={15}
-                  isPercentageHeight={false}
-                  isPercentageWidth={false}
-                />
-              );
-            }}
-          />
+            })}
+          </Animated.View>
         </Animated.View>
 
         <View style={styles.sectionContainer}>
@@ -142,8 +169,8 @@ export default function Home() {
           </View>
 
           <FlatList
-            data={continueReading}
             horizontal
+            data={continueReading}
             renderItem={({ item, index }) => {
               return (
                 <ContinueReadingItem
@@ -186,6 +213,7 @@ export default function Home() {
                   height={160}
                   width={120}
                   radius={5}
+                  isLink
                 />
               );
             }}
@@ -207,19 +235,26 @@ export default function Home() {
             <Text style={styles.sectionHeading}>Reading goal</Text>
           </View>
 
-          <View style={{ position: "relative", height: 100, width: "100%" }}>
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                rowGap: verticalScale(30),
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: [{ translateX: "-50%" }, { translateY: "-50%" }],
-              }}
-            >
+          <View
+            style={{
+              position: "relative",
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <OvalIcon
+                height={verticalScale(320)}
+                width={horizontalScale(315)}
+              />
+            </View>
+
+            <View style={styles.readingGoalInfo}>
               <Text style={styles.readingGoalHeader}>Today&apos;s reading</Text>
+
+              <TickIcon
+                height={verticalScale(45)}
+                width={horizontalScale(45)}
+              />
 
               <Text style={styles.readingGoalLeading}>
                 50 minutes to daily reading goals
@@ -360,6 +395,16 @@ function makeStyles({
       fontFamily: "ArimaRegular",
       color: colors.mainTextColor,
       fontSize: moderateScale(12),
+    },
+
+    readingGoalInfo: {
+      justifyContent: "center",
+      alignItems: "center",
+      rowGap: verticalScale(30),
+      position: "absolute",
+      left: "50%",
+      top: "100%",
+      transform: [{ translateX: "-50%" }, { translateY: "-100%" }],
     },
 
     keepReadingBtnContainer: {

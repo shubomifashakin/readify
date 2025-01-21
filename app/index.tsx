@@ -1,16 +1,20 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
 
 import Animated, {
   FadeOutUp,
   FadeInDown,
   ZoomInLeft,
+  FadeOut,
 } from "react-native-reanimated";
 
 import { Colors, useTheme } from "@rneui/themed";
 
+import Button from "@/components/Button";
+
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
+
+const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 export default function Onboarding() {
   const { theme } = useTheme();
@@ -18,7 +22,10 @@ export default function Onboarding() {
   const styles = makeStyles({ colors: theme.colors });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <AnimatedSafeAreaView
+      exiting={FadeOut.duration(1000)}
+      style={styles.container}
+    >
       <View style={styles.upper}>
         <Animated.View
           entering={ZoomInLeft.duration(1000).springify().damping(200)}
@@ -66,16 +73,10 @@ export default function Onboarding() {
             books, curated just for you. Browse, read, and enjoy!"
           </Text>
 
-          <View style={styles.buttonContainer}>
-            <Link style={styles.button} href={"/(tabs)"}>
-              <View style={styles.buttonTextContainer}>
-                <Text style={styles.buttonText}>Explore</Text>
-              </View>
-            </Link>
-          </View>
+          <Button href={"/(tabs)"}>Explore</Button>
         </Animated.View>
       </View>
-    </SafeAreaView>
+    </AnimatedSafeAreaView>
   );
 }
 
@@ -152,36 +153,6 @@ function makeStyles({ colors }: { colors: Colors }) {
       fontFamily: "ArimaRegular",
       color: colors.mainTextColor,
       fontSize: moderateScale(16),
-    },
-
-    buttonContainer: {
-      overflow: "hidden",
-      borderRadius: moderateScale(40),
-      width: horizontalScale(185),
-      height: verticalScale(45),
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: colors.mainTextColor,
-    },
-
-    button: {
-      backgroundColor: colors.mainTextColor,
-      width: "100%",
-      height: "100%",
-    },
-
-    buttonTextContainer: {
-      alignContent: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-    },
-
-    buttonText: {
-      fontFamily: "ArimaBold",
-      fontSize: moderateScale(16, -0.8),
-      textAlign: "center",
-      color: colors.background,
     },
   });
 }

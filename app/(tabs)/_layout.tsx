@@ -3,13 +3,13 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, Tabs } from "expo-router";
 
+import Header from "@/components/header";
+import TabLabel from "@/components/TabLabel";
+import HomeIcon from "@/components/svgs/HomeIcon";
+import BackIcon from "@/components/svgs/BackIcon";
+import SearchIcon from "@/components/svgs/searchIcon";
 import BookstoreIcon from "@/components/svgs/Bookstore";
 import LibraryIcon from "@/components/svgs/LibraryIcon";
-import SearchIcon from "@/components/svgs/searchIcon";
-import BackIcon from "@/components/svgs/BackIcon";
-import HomeIcon from "@/components/svgs/HomeIcon";
-import TabLabel from "@/components/TabLabel";
-import Header from "@/components/header";
 
 import { Colors } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
@@ -114,6 +114,15 @@ export default function TabLayout() {
           },
         }}
       />
+
+      <Tabs.Screen
+        name="currentRead"
+        options={{
+          title: "Read",
+          href: null,
+          tabBarStyle: { display: "none" },
+        }}
+      />
     </Tabs>
   );
 }
@@ -129,7 +138,7 @@ function makeStyles({
     header: {
       justifyContent: "space-between",
       paddingHorizontal: horizontalScale(20),
-      height: verticalScale(100),
+      height: verticalScale(120 - insets.top),
       flexDirection: "row",
       alignItems: "center",
       backgroundColor: colors.white,
