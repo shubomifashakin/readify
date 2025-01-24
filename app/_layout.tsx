@@ -1,31 +1,20 @@
 import { useEffect } from "react";
-import { View, Pressable } from "react-native";
-
+import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { router, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
 
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as SplashScreen from "expo-splash-screen";
 
 import { ThemeProvider } from "@rneui/themed";
 
 import { theme } from "@/constants/Colors";
 
 import "react-native-reanimated";
-import Header from "@/components/header";
-import BackIcon from "@/components/svgs/BackIcon";
-import BookmarkIcon from "@/components/svgs/BookmarkIcon";
-
-import { horizontalScale, verticalScale } from "@/lib/helpers";
-import Animated, { SlideInRight } from "react-native-reanimated";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const insets = useSafeAreaInsets();
-
   const [loaded] = useFonts({
     ArimaRegular: require("../assets/fonts/arima/Arima-Regular.ttf"),
     ArimaBold: require("../assets/fonts/arima/Arima-Bold.ttf"),
@@ -37,7 +26,6 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
-      console.log("loaded");
     }
   }, [loaded]);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ImageSourcePropType,
@@ -73,7 +73,7 @@ export default function Home() {
 
   const styles = makeStyles({ colors: theme.colors, insets });
 
-  const flatlistScrolled = useSharedValue(0);
+  const trendingTranslate = useSharedValue(0);
 
   const [width, setWidth] = useState(0);
 
@@ -81,12 +81,12 @@ export default function Home() {
   const totalScrollableFlatlistWidth = width;
 
   const animatedStyles = useAnimatedStyle(() => {
-    return { transform: [{ translateX: flatlistScrolled.value }] };
+    return { transform: [{ translateX: trendingTranslate.value }] };
   });
 
   useEffect(
     function () {
-      flatlistScrolled.value = withRepeat(
+      trendingTranslate.value = withRepeat(
         withTiming(-totalScrollableFlatlistWidth, {
           duration: 10000,
           easing: Easing.linear,
@@ -135,7 +135,7 @@ export default function Home() {
 
         <Animated.View
           entering={customEntering}
-          style={[styles.sectionContainer]}
+          style={styles.sectionContainer}
         >
           <View style={styles.sectionHeaderTexts}>
             <Text style={styles.sectionHeading}>Trending</Text>
