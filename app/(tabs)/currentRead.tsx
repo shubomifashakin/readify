@@ -1,10 +1,10 @@
 import { Image, ImageSourcePropType, StyleSheet, View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 import { useLocalSearchParams } from "expo-router";
 
 import Button from "@/components/Button";
 
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
-import Animated, { FadeIn } from "react-native-reanimated";
 
 export default function Read() {
   const { bookImage } = useLocalSearchParams<{ bookImage: string }>();

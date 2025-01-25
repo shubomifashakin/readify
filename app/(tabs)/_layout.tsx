@@ -3,6 +3,9 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { EdgeInsets, useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, Tabs } from "expo-router";
 
+import { Colors } from "@rneui/base";
+import { useTheme } from "@rneui/themed";
+
 import Header from "@/components/header";
 import TabLabel from "@/components/TabLabel";
 import HomeIcon from "@/components/svgs/HomeIcon";
@@ -10,9 +13,6 @@ import BackIcon from "@/components/svgs/BackIcon";
 import SearchIcon from "@/components/svgs/searchIcon";
 import BookstoreIcon from "@/components/svgs/Bookstore";
 import LibraryIcon from "@/components/svgs/LibraryIcon";
-
-import { Colors } from "@rneui/base";
-import { useTheme } from "@rneui/themed";
 
 import { horizontalScale, verticalScale } from "@/lib/helpers";
 
@@ -24,9 +24,21 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        animation: "fade",
         headerShown: true,
         tabBarActiveTintColor: "#000",
         tabBarStyle: { height: verticalScale(80), alignItems: "center" },
+        tabBarButton: ({ href, children, onPress }) => (
+          <Pressable
+            onPress={onPress}
+            style={{
+              alignItems: "center",
+              paddingVertical: verticalScale(10),
+            }}
+          >
+            {children}
+          </Pressable>
+        ),
         header(props) {
           return (
             <Header>

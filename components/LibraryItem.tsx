@@ -1,13 +1,14 @@
-import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import DotsIcon from "./svgs/Dots";
-import { Colors, useTheme } from "@rneui/themed";
-import { useState } from "react";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { Colors, useTheme } from "@rneui/themed";
+
+import DotsIcon from "./svgs/Dots";
+
+import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
 export default function LibraryItem({
   item,

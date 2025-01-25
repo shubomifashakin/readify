@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Image,
@@ -103,64 +103,70 @@ export default function ReadingPage() {
         </View>
       </View>
 
-      <View style={styles.bottomContainer}>
-        <View style={styles.bottomNavContainer}>
-          <View style={styles.navbar}>
-            <View style={styles.navbarTextContainer}>
-              <BookIcon
-                width={horizontalScale(20)}
-                height={verticalScale(20)}
-              />
-
-              <Text style={styles.navbarText}>Read book</Text>
-            </View>
-
-            <Separator
-              height={"50%"}
-              isPercentageHeight={true}
-              width={2.5}
-              isPercentageWidth={false}
-              styles={{ backgroundColor: theme.colors.textColor }}
-            />
-
-            <View style={styles.navbarTextContainer}>
-              <HeadphonesIcon
-                width={horizontalScale(20)}
-                height={verticalScale(20)}
-              />
-
-              <Text style={styles.navbarText}>Listen to Audio</Text>
-            </View>
-          </View>
-        </View>
-
-        <View>
-          <HeadingText>About the book</HeadingText>
-
-          <Text style={styles.leadingText}>
-            “These are the people you will need to know,” he went on.
-            “Connections that you must cultivate.Lucy nodded dutifully, all the
-            while making a mental list of all the places she would rather be.
-            Paris, Venice, Greece, although weren’t they at war? No matter. She
-            would still rather be in Greece.
-          </Text>
-        </View>
-
-        <View>
-          <HeadingText>Who is this for</HeadingText>
-
-          <Text style={styles.leadingText}>
-            “These are the people you will need to know,” he went on.
-            “Connections that you must cultivate.Lucy nodded dutifully, all the
-            while making a mental list of all the places she would rather be.
-            Paris, Venice, Greece, although weren’t they at war? No matter. She
-            would still rather be in Greece.
-          </Text>
-        </View>
-      </View>
+      <BookInfo />
     </Animated.ScrollView>
   );
 }
+
+const BookInfo = memo(function BookInfo() {
+  const { theme } = useTheme();
+  const styles = makeStyles(theme);
+
+  return (
+    <View style={styles.bottomContainer}>
+      <View style={styles.bottomNavContainer}>
+        <View style={styles.navbar}>
+          <View style={styles.navbarTextContainer}>
+            <BookIcon width={horizontalScale(20)} height={verticalScale(20)} />
+
+            <Text style={styles.navbarText}>Read book</Text>
+          </View>
+
+          <Separator
+            height={"50%"}
+            isPercentageHeight={true}
+            width={2.5}
+            isPercentageWidth={false}
+            styles={{ backgroundColor: theme.colors.textColor }}
+          />
+
+          <View style={styles.navbarTextContainer}>
+            <HeadphonesIcon
+              width={horizontalScale(20)}
+              height={verticalScale(20)}
+            />
+
+            <Text style={styles.navbarText}>Listen to Audio</Text>
+          </View>
+        </View>
+      </View>
+
+      <View>
+        <HeadingText>About the book</HeadingText>
+
+        <Text style={styles.leadingText}>
+          “These are the people you will need to know,” he went on. “Connections
+          that you must cultivate.Lucy nodded dutifully, all the while making a
+          mental list of all the places she would rather be. Paris, Venice,
+          Greece, although weren’t they at war? No matter. She would still
+          rather be in Greece.
+        </Text>
+      </View>
+
+      <View>
+        <HeadingText>Who is this for</HeadingText>
+
+        <Text style={styles.leadingText}>
+          “These are the people you will need to know,” he went on. “Connections
+          that you must cultivate.Lucy nodded dutifully, all the while making a
+          mental list of all the places she would rather be. Paris, Venice,
+          Greece, although weren’t they at war? No matter. She would still
+          rather be in Greece.
+        </Text>
+      </View>
+    </View>
+  );
+});
 
 function makeStyles({ colors }: { colors: Colors }) {
   return StyleSheet.create({

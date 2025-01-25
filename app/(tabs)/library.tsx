@@ -3,11 +3,11 @@ import React, { FlatList, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@rneui/themed";
 import { Colors } from "@rneui/base";
 
+import Separator from "@/components/Separator";
 import LibraryItem from "@/components/LibraryItem";
+import HeadingText from "@/components/HeadingText";
 
 import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
-import Separator from "@/components/Separator";
-import HeadingText from "@/components/HeadingText";
 
 const books = [
   {

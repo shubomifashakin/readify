@@ -1,12 +1,13 @@
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
-import SearchIcon from "@/components/svgs/searchIcon";
 
 import { Colors } from "@rneui/base";
 import { useTheme } from "@rneui/themed";
 
-import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 import Separator from "@/components/Separator";
 import HeadingText from "@/components/HeadingText";
+import SearchIcon from "@/components/svgs/searchIcon";
+
+import { horizontalScale, moderateScale, verticalScale } from "@/lib/helpers";
 
 const trendingBooks = [
   "Unbreak the broken",
